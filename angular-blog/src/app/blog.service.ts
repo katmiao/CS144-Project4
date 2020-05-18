@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Post } from './post';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root'
@@ -11,6 +13,14 @@ export class BlogService {
 		this.draft = null;
 	}
 
+	fetchPosts(username: string): Promise<Post[]>
+	{
+	  return new Promise<Post[]>(function() 
+	  {
+		console.log("hello");
+	  });
+	}
+
 	setCurrentDraft(post: Post): void {
 		this.draft = post;
 	}
@@ -18,12 +28,4 @@ export class BlogService {
 	getCurrentDraft(): Post {
 		return this.draft;
 	}
-}
-
-export class Post {
-	postid: number;
-	created: Date;
-	modified: Date;
-	title: string;
-	body: string;
 }
