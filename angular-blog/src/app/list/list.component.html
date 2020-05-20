@@ -1,0 +1,8 @@
+<button>New Post</button>
+<ul class="list">
+    <li *ngFor="let p of posts"
+        [class.selected]="p === selectedPost"
+        (click)="onSelect(p)">
+        <span class="badge">{{ this.parseDate(p.modified) }}</span> {{ p.title }}
+    </li>
+</ul>

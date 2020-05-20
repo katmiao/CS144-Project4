@@ -8,6 +8,7 @@ module.exports = function (config) {
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
+      require('karma-phantomjs-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('@angular-devkit/build-angular/plugins/karma')
@@ -25,18 +26,29 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
+    browsers: ['Chrome_without_sandbox'],
+    customLaunchers: {
+      Chrome_without_sandbox: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox'] // with sandbox it fails under Docker
+      }
+    },
     singleRun: false,
     restartOnFileChange: true,
     proxies: {
       "/api": { 
-          "target": "http://192.168.99.100:3000",
+          "target": "http://localhost:3000",
+          "changeOrigin": true 
+      },
+      "/api/*": { 
+          "target": "http://localhost:3000",
           "changeOrigin": true 
       },
       "/login": { 
-          "target": "http://192.168.99.100:3000",
+          "target": "http://localhost:3000",
           "changeOrigin": true
       }
-    }
+    },
+    
   });
 };
