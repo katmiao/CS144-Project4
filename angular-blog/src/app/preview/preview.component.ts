@@ -21,11 +21,12 @@ export class PreviewComponent implements OnInit {
 	*  and rendered as HTML when a “preview URL” is activated
 	*/
 
-  	constructor() { }
+  	constructor(private blogService: BlogService) { }
 
   	ngOnInit(): void {
   		this.parser = new Parser();
   		this.htmlRenderer = new HtmlRenderer();
+  		this.preview();
   	}
 
   	preview(): void {
@@ -35,11 +36,10 @@ export class PreviewComponent implements OnInit {
   		}
   		this.markdownTitle = this.htmlRenderer.render(this.parser.parse(this.post.title));
   		this.markdownBody = this.htmlRenderer.render(this.parser.parse(this.post.body));
-	  }
+	}
 	  
-	  toEdit()
-	  {
+	toEdit(): void {
 		  
-	  }
+	}
 
 }

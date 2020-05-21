@@ -65,7 +65,43 @@ export class BlogService {
 		const url = `api/${username}/${post.postid}`;
 		return new Promise<void>((resolve, reject) => {
 			this.http
+				// based on heros tutorial, should this be:
+				// .post<Post>(url, post, this.httpOptions)? 
 				.post<void>(url, post)
+				.toPromise()
+				.then(() => {
+					resolve();
+				})
+				.catch(err => {
+					console.log(err.message);
+					reject();
+				});
+		});
+	}
+
+	updatePost(username: string, post: Post): Promise<void> 
+	{
+		const url = `api/${username}/${post.postid}`;
+		return new Promise<void>((resolve, reject) => {
+			this.http
+				.put(url, post, this.httpOptions)
+				.toPromise()
+				.then(() => {
+					resolve();
+				})
+				.catch(err => {
+					console.log(err.message);
+					reject();
+				});
+		});
+	}
+
+	deletePost(username: string, postid: number): Promise<void> 
+	{
+		const url = `api/${username}/${postid}`;
+		return new Promise<void>((resolve, reject) => {
+			this.http
+				.delete<Post>(url, this.httpOptions)
 				.toPromise()
 				.then(() => {
 					resolve();
