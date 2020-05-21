@@ -7,12 +7,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 
 export class BlogService {
-	/*httpOptions = {
-		headers: new HttpHeaders({ 'Cookie': document.cookie })
-	};*/
+	httpOptions = {
+		headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+	};
 	draft: Post;
 
-	constructor(private http: HttpClient) { 
+	constructor(public http: HttpClient) { 
 		this.draft = null;
 	}
 
@@ -25,7 +25,6 @@ export class BlogService {
 
 	fetchPosts(username: string): Promise<Post[]>
 	{
-		console.log("fetch posts called");
 		const url = `api/${username}`;
 		let promise = new Promise<Post[]>((resolve, reject) =>
 		{
@@ -42,6 +41,40 @@ export class BlogService {
 					});
 		});
 		return promise;
+	}
+
+	getPost(username: string, postid: number): Promise<Post>
+	{
+		const url = `api/${username}/${postid}`;
+		return new Promise<Post>((resolve, reject) => {
+			this.http
+				.get<Post>(url)
+				.toPromise()
+				.then(res => {
+					resolve(res);
+				})
+				.catch(err => {
+					console.log(err.message);
+					reject();
+				});
+		});
+	}
+
+	newPost(username: string, post: Post): Promise<void>
+	{
+		const url = `api/${username}/${post.postid}`;
+		return new Promise<void>((resolve, reject) => {
+			this.http
+				.post<void>(url, post)
+				.toPromise()
+				.then(() => {
+					resolve();
+				})
+				.catch(err => {
+					console.log(err.message);
+					reject();
+				});
+		});
 	}
 
 	setCurrentDraft(post: Post): void {

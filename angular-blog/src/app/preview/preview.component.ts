@@ -35,6 +35,11 @@ export class PreviewComponent implements OnInit {
   		}
   		this.markdownTitle = this.htmlRenderer.render(this.parser.parse(this.post.title));
   		this.markdownBody = this.htmlRenderer.render(this.parser.parse(this.post.body));
-  	}
+	  }
+	  
+	  toEdit()
+	  {
+		  
+	  }
 
 }

@@ -7,13 +7,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { ListComponent } from './list/list.component';
 import { EditComponent } from './edit/edit.component';
 import { PreviewComponent } from './preview/preview.component';
+import { MyDatePipePipe } from './my-date-pipe.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListComponent,
     EditComponent,
-    PreviewComponent
+    PreviewComponent,
+    MyDatePipePipe
   ],
   imports: [
     BrowserModule,

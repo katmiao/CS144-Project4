@@ -32,3 +32,14 @@ input
 {
     margin: 0.5em 0.3em 0.5em 0;
 }
+
+.disabledBtn
+{
+    color: #c0c0c0;
+}
+
+.disabledBtn:hover
+{
+    cursor: context-menu;
+    background-color: #EEE;
+}

@@ -9,9 +9,10 @@ import { BlogService } from '../blog.service';
 })
 export class ListComponent implements OnInit {
   posts: Post[];
-  selectedPost: Post;
+  username: string;
+  nextPostid: number;
 
-  constructor(private blogService: BlogService) 
+  constructor(public blogService: BlogService) 
   {
   }
 
@@ -22,48 +23,32 @@ export class ListComponent implements OnInit {
 
   onSelect(post: Post)
   {
-    this.selectedPost = post;
+    this.blogService.setCurrentDraft(post);
+  }
+
+  onNewPost()
+  {
+    let currentUtc = new Date().getTime();
+    let p = new Post(this.nextPostid, currentUtc, currentUtc, "", "", true);
+    this.posts.push(p);
+    this.blogService.setCurrentDraft(p);
+    this.nextPostid++;
   }
 
   getPosts(): void
   {
-    let username = this.blogService.parseJWT(document.cookie)["usr"];
-    console.log(username);
+    this.username = this.blogService.parseJWT(document.cookie)["usr"];
     this.blogService
-      .fetchPosts(username)
+      .fetchPosts(this.username)
       .then(res => {
+        this.nextPostid = res[res.length - 1].postid + 1;
+        
+        for(let i = 0; i < res.length; i++)
+        {
+          res[i].unsaved = false;
+        }
+        
         this.posts = res;
-      });
-  }
-
-  parseDate(epoch: string): string
-  {
-    let date = new Date(epoch);
-    let day = date.getDate();
-    let month = date.getMonth();
-    let year = date.getFullYear();
-    let hour = date.getHours();
-    let minutes = date.getMinutes();
-    let zeroHour = "";
-    let zeroDay = "";
-    let zeroMonth = "";
-    let zeroMinute = "";
-    let meridium = "AM";
-    if(hour > 12)
-    {
-      hour = hour % 12;
-      meridium = "PM";
-    }
-      
-    if(hour < 10)
-      zeroHour = "0";
-    if(day < 10)
-      zeroDay = "0";
-    if(month < 10)
-      zeroMonth = "0";
-    if(minutes < 10)
-      zeroMinute = "0";
-    return `${zeroMonth}${month}/${zeroDay}${day}/${year}, 
-            ${zeroHour}${hour}:${zeroMinute}${minutes} ${meridium}`;
+      })
   }
 }

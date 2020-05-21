@@ -1,8 +1,18 @@
-<button>New Post</button>
-<ul class="list">
-    <li *ngFor="let p of posts"
-        [class.selected]="p === selectedPost"
-        (click)="onSelect(p)">
-        <span class="badge">{{ this.parseDate(p.modified) }}</span> {{ p.title }}
-    </li>
-</ul>
+<div id="post-list" class="component">
+    <button (click)="onNewPost()">New Post</button>
+    <ul class="list">
+        <li *ngFor="let p of posts"
+            [class.selected]="p === this.blogService.getCurrentDraft()"
+            (click)="onSelect(p)">
+            <span class="badge">{{ p.modified | myDatePipe }}</span> {{ p.title }}
+        </li>
+    </ul>
+</div>
+
+<div *ngIf="this.blogService.getCurrentDraft()">
+    <app-edit 
+        class="component" 
+        [username]="this.username" 
+        [postid]="this.blogService.getCurrentDraft().postid">
+    </app-edit>
+</div>
