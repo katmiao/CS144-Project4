@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Post } from '../post';
 import { BlogService } from '../blog.service';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -12,18 +13,22 @@ export class ListComponent implements OnInit {
   username: string;
   nextPostid: number;
 
-  constructor(public blogService: BlogService) 
+  constructor(public blogService: BlogService, private route: ActivatedRoute, private router: Router) 
   {
   }
 
   ngOnInit(): void 
   {
     this.getPosts();
+    this.route.queryParams.subscribe(params => {
+      // todo - https://angular.io/guide/router - for all components 
+    });
   }
 
   onSelect(post: Post)
   {
     this.blogService.setCurrentDraft(post);
+    this.router.navigate(['edit', post.postid])
   }
 
   onNewPost()
@@ -33,6 +38,7 @@ export class ListComponent implements OnInit {
     this.posts.push(p);
     this.blogService.setCurrentDraft(p);
     this.nextPostid++;
+    this.router.navigate(['edit', p.postid]);
   }
 
   getPosts(): void

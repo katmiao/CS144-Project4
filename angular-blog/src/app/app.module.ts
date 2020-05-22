@@ -8,6 +8,7 @@ import { ListComponent } from './list/list.component';
 import { EditComponent } from './edit/edit.component';
 import { PreviewComponent } from './preview/preview.component';
 import { MyDatePipePipe } from './my-date-pipe.pipe';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { MyDatePipePipe } from './my-date-pipe.pipe';
     ListComponent,
     EditComponent,
     PreviewComponent,
-    MyDatePipePipe
+    MyDatePipePipe,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

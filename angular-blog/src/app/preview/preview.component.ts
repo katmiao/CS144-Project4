@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Post } from '../post';
 import { BlogService } from '../blog.service';
 import { Parser, HtmlRenderer } from 'commonmark';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   	selector: 'app-preview',
@@ -21,7 +22,7 @@ export class PreviewComponent implements OnInit {
 	*  and rendered as HTML when a “preview URL” is activated
 	*/
 
-  	constructor(private blogService: BlogService) { }
+  	constructor(private blogService: BlogService, private route: ActivatedRoute, private router: Router) { }
 
   	ngOnInit(): void {
   		this.parser = new Parser();
@@ -39,7 +40,7 @@ export class PreviewComponent implements OnInit {
 	}
 	  
 	toEdit(): void {
-		  
+		this.router.navigate(['edit', this.post.postid]);
 	}
 
 }

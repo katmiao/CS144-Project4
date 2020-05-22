@@ -65,8 +65,6 @@ export class BlogService {
 		const url = `api/${username}/${post.postid}`;
 		return new Promise<void>((resolve, reject) => {
 			this.http
-				// based on heros tutorial, should this be:
-				// .post<Post>(url, post, this.httpOptions)? 
 				.post<void>(url, post)
 				.toPromise()
 				.then(() => {
@@ -101,7 +99,7 @@ export class BlogService {
 		const url = `api/${username}/${postid}`;
 		return new Promise<void>((resolve, reject) => {
 			this.http
-				.delete<Post>(url, this.httpOptions)
+				.delete<void>(url, this.httpOptions)
 				.toPromise()
 				.then(() => {
 					resolve();
