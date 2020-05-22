@@ -5,7 +5,8 @@ export class Post {
     modified: number, 
     title: string, 
     body: string, 
-    unsaved: boolean)
+    unsaved: boolean,
+    isNewPost: boolean)
   {
     this.postid = postid;
     this.created = created;
@@ -13,6 +14,7 @@ export class Post {
     this.title = title;
     this.body = body;
     this.unsaved = unsaved;
+    this.isNewPost = isNewPost;
   }
   
     postid: number;
@@ -21,4 +23,5 @@ export class Post {
     title: string;
     body: string;
     unsaved: boolean;
+    isNewPost: boolean;
   }

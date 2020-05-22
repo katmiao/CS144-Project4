@@ -1,7 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Post } from '../post';
 import { BlogService } from '../blog.service';
-//import { DatePipe } from '@angular/common';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
@@ -12,7 +11,10 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 export class EditComponent implements OnInit {
   @Input() username: string;
   @Input() postid: number;
-  post: Post;
+  @Input() post: Post;
+  @Output() deletePostEvent: EventEmitter<Post> = new EventEmitter();
+  @Output() previewEvent: EventEmitter<void> = new EventEmitter();
+
   constructor(public blogService: BlogService, private route: ActivatedRoute, private router: Router) 
   { 
   }
@@ -37,24 +39,89 @@ export class EditComponent implements OnInit {
     }
   }
 
+  onChangeTitle(newTitle: string): void
+  {
+    if(!this.post.unsaved)
+    {
+      this.post.unsaved = true;
+    }
+    this.post.title = newTitle;
+  }
+
+  onChangeBody(newBody: string): void
+  {
+    if(!this.post.unsaved)
+    {
+      this.post.unsaved = true;
+    }
+    this.post.body = newBody;
+  }
+
   getPost(): void
   {
     this.blogService
-      .getPost(this.username, this.postid)
+      .getPost(this.username, this.post.postid)
       .then(res => {
         this.post = res;
         this.post.unsaved = false;
       });
   }
 
-  onPreview(): void
+  savePost(): void
   {
-    this.router.navigate(['preview', this.post.postid])
+    if(this.post.isNewPost)
+    {
+      delete this.post.isNewPost;
+      delete this.post.unsaved;
+      console.log(this.post);
+      this.blogService
+        .newPost(this.username, this.post)
+        .then(() => {
+          this.post.isNewPost = false;
+          this.post.unsaved = false;
+          this.post.modified = new Date().getTime();
+          this.blogService.setCurrentDraft(this.post);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+    else
+    {
+      delete this.post.isNewPost;
+      delete this.post.unsaved;
+      this.blogService
+        .updatePost(this.username, this.post)
+        .then(() => {
+          this.post.isNewPost = false;
+          this.post.unsaved = false;
+          this.post.modified = new Date().getTime();
+          this.blogService.setCurrentDraft(this.post);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 
-  onDelete(): void
+  deletePost(): void
   {
-    this.blogService.deletePost(this.username, this.postid);
+    this.blogService
+      .deletePost(this.username, this.post.postid)
+      .then(() => {
+        this.blogService.setCurrentDraft(null);
+        this.deletePostEvent.emit(this.post);
+      })
+      .catch(err => {
+        console.log(err);
+      });
     this.router.navigate(['/'])
+  }
+
+  previewPost(): void
+  {
+    this.blogService.setCurrentDraft(null);
+    this.previewEvent.emit();
+    this.router.navigate(['preview', this.post.postid])
   }
 }

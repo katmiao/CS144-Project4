@@ -9,10 +9,18 @@
     </ul>
 </div>
 
-<div *ngIf="this.blogService.getCurrentDraft()">
+<div *ngIf="this.editComp">
     <app-edit 
+        (deletePostEvent)="onDeletePost($event)"
+        (previewEvent)="onPreviewPost()"
         class="component" 
         [username]="this.username" 
-        [postid]="this.blogService.getCurrentDraft().postid">
+        [post]="this.blogService.getCurrentDraft()">
     </app-edit>
+</div>
+
+<div *ngIf="this.previewComp">
+    <app-preview
+        [post]="this.blogService.getCurrentDraft()">
+    </app-preview>
 </div>
