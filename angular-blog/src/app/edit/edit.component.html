@@ -1,35 +1,41 @@
 <div>
-    <form action="post" method="post">
-        <div style="text-align: left; margin-bottom: 20px;">
-            <label>Title</label>
-            <div>
-                <input 
-                    type="text" 
-                    placeholder="Write the title of your post here..." 
-                    [value]="this.post?.title"/>
-            </div>
-        </div>
-        <div style="text-align: left;">
-            <label>Body</label>
-            <div>
-                <textarea 
-                    placeholder="Write the body of your post here..."
-                    [value]="this.post?.body">
-                </textarea>
-            </div>
-        </div>
+    <div style="text-align: left; margin-bottom: 20px;">
+        <label>Title</label>
         <div>
-            Last Modified: {{ this.post?.modified | myDatePipe }} 
+            <input 
+                type="text" 
+                placeholder="Write the title of your post here..." 
+                [ngModel]="this.post.title"
+                (ngModelChange)="onChangeTitle($event)"/>
         </div>
-        <div id="buttons">          
-            <button type="submit">Preview</button>
-            <button 
-                [disabled]="!this.post.unsaved" 
-                [class.disabledBtn]="!this.post.unsaved"
-                type="submit">
-                Save
-            </button> 
-            <button type="submit">Delete</button>
+    </div>
+    <div style="text-align: left;">
+        <label>Body</label>
+        <div>
+            <textarea 
+                placeholder="Write the body of your post here..."
+                [ngModel]="this.post.body"
+                (ngModelChange)="onChangeBody($event)">
+            </textarea>
         </div>
-    </form>
+    </div>
+    <div>
+        Last Modified: {{ this.post?.modified | myDatePipe }} 
+    </div>
+    <div id="buttons">          
+        <button 
+            (click)="previewPost()">
+            Preview
+        </button>
+        <button 
+            [disabled]="!this.post.unsaved" 
+            [class.disabledBtn]="!this.post.unsaved"
+            (click)="savePost()">
+            Save
+        </button> 
+        <button 
+            (click)="deletePost()">
+            Delete
+        </button>
+    </div>
 </div>

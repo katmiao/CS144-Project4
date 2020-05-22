@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Post } from '../post';
 import { BlogService } from '../blog.service';
 import { Parser, HtmlRenderer } from 'commonmark';
@@ -9,7 +9,7 @@ import { Parser, HtmlRenderer } from 'commonmark';
   	styleUrls: ['./preview.component.css']
 })
 export class PreviewComponent implements OnInit {
-	post: Post;
+	@Input() post: Post;
 	markdownTitle: string;
 	markdownBody: string;
 	parser: Parser;
@@ -25,15 +25,23 @@ export class PreviewComponent implements OnInit {
 
   	ngOnInit(): void {
   		this.parser = new Parser();
-  		this.htmlRenderer = new HtmlRenderer();
-  		this.preview();
-  	}
+		this.htmlRenderer = new HtmlRenderer(); 
+		this.preview();
+	}
+	  
+	ngOnChanges(): void
+	{
+		this.preview();
+	}
 
   	preview(): void {
+		  console.log(this.blogService.getCurrentDraft());
   		if (this.post == null) {
   			console.log("---ERROR: previewing null post");
   			return;
-  		}
+		}
+		  
+		console.log(this.post.title);
   		this.markdownTitle = this.htmlRenderer.render(this.parser.parse(this.post.title));
   		this.markdownBody = this.htmlRenderer.render(this.parser.parse(this.post.body));
 	}

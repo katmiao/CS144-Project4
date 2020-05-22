@@ -8,7 +8,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export class BlogService {
 	httpOptions = {
-		headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+		headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+		responseType: 'text' as 'json'
 	};
 	draft: Post;
 
@@ -31,14 +32,13 @@ export class BlogService {
 			this.http.get<Post[]>(url)
 				.toPromise()
 				.then(res => 
-					{
-						resolve(res);
-					})
+				{
+					resolve(res);
+				})
 				.catch(err => 
-					{
-						console.log(err.message);
-						reject([]);
-					});
+				{
+					reject(err.message);
+				});
 		});
 		return promise;
 	}
@@ -67,14 +67,13 @@ export class BlogService {
 			this.http
 				// based on heros tutorial, should this be:
 				// .post<Post>(url, post, this.httpOptions)? 
-				.post<void>(url, post)
+				.post<void>(url, post, this.httpOptions)
 				.toPromise()
 				.then(() => {
 					resolve();
 				})
 				.catch(err => {
-					console.log(err.message);
-					reject();
+					reject(err.message);
 				});
 		});
 	}
@@ -84,14 +83,13 @@ export class BlogService {
 		const url = `api/${username}/${post.postid}`;
 		return new Promise<void>((resolve, reject) => {
 			this.http
-				.put(url, post, this.httpOptions)
+				.put<void>(url, post, this.httpOptions)
 				.toPromise()
-				.then(() => {
+				.then((res) => {
 					resolve();
 				})
 				.catch(err => {
-					console.log(err.message);
-					reject();
+					reject(err.message);
 				});
 		});
 	}
@@ -107,8 +105,7 @@ export class BlogService {
 					resolve();
 				})
 				.catch(err => {
-					console.log(err.message);
-					reject();
+					reject(err.message);
 				});
 		});
 	}
