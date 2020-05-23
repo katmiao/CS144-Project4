@@ -1,2 +1,7 @@
-<app-list id="list-component"></app-list>
-<router-outlet></router-outlet>
+<app-list 
+    id="list-component"
+    #appList>
+</app-list>
+<router-outlet
+    (deletePostEvent)="appList.onDeletePost($event)">
+</router-outlet>

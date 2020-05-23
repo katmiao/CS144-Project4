@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Post } from './post';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,6 +13,8 @@ export class BlogService {
 		responseType: 'text' as 'json'
 	};
 	draft: Post;
+	postList: Post[];
+	nextPostid: number;
 
 	constructor(public http: HttpClient) { 
 		this.draft = null;
@@ -65,7 +68,7 @@ export class BlogService {
 		const url = `api/${username}/${post.postid}`;
 		return new Promise<void>((resolve, reject) => {
 			this.http
-				.post<void>(url, post)
+				.post<void>(url, post, this.httpOptions)
 				.toPromise()
 				.then(() => {
 					resolve();
@@ -115,4 +118,61 @@ export class BlogService {
 	getCurrentDraft(): Post {
 		return this.draft;
 	}
+
+	// local API
+	getLocalPosts(): Observable<Post[]>
+	{
+		return of(this.postList);
+	}
+
+	getCurrentDraftObservable(): Observable<Post>
+	{
+		return of(this.draft);
+	}
+
+	getNextPostId(): number
+	{
+		return this.nextPostid;
+	}
+
+	incrementNextPostId(): void
+	{
+		this.nextPostid++;
+	}
+
+	addLocalPost(post: Post): void
+	{
+		this.postList.push(post);
+	}
+
+	deleteLocalPost(postid: number): void
+	{
+		for(let i = 0; i < this.postList.length; i++)
+		{
+			if(this.postList[i].postid == postid)
+			{
+				this.postList.splice(i, 1);
+				break;
+			}
+		}
+	}
+
+	updateLocalPosts(): Promise<void>
+	{
+		return this.fetchPosts(localStorage.getItem('username'))
+					.then(res => {
+						this.nextPostid = res[res.length - 1].postid + 1;
+						
+						for(let i = 0; i < res.length; i++)
+						{
+							res[i].unsaved = false;
+							res[i].isNewPost = false;
+						}
+						
+						this.postList = res;
+					})
+					.catch(err => {
+						console.log(err);
+					});
+				};
 }

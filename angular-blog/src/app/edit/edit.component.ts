@@ -8,35 +8,29 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class EditComponent implements OnInit {
-  @Input() username: string;
-  @Input() postid: number;
-  @Input() post: Post;
+export class EditComponent implements OnInit {;
+  post: Post;
   @Output() deletePostEvent: EventEmitter<Post> = new EventEmitter();
   @Output() previewEvent: EventEmitter<void> = new EventEmitter();
 
-  constructor(public blogService: BlogService, private route: ActivatedRoute, private router: Router) 
+  constructor(
+    public blogService: BlogService, 
+    private route: ActivatedRoute, 
+    private router: Router) 
   { 
   }
 
   ngOnInit(): void 
   {
-    //this.post = this.blogService.getCurrentDraft();
-    this.route.queryParams.subscribe(params => {
-      // this.name = params['name'];
+    this.route.paramMap.subscribe(() => {
+      let postid = parseInt(this.route.snapshot.paramMap.get('id'));
+      this.getPost(postid);
     });
   }
 
   ngOnChanges(): void
   {
-    if(this.blogService.getCurrentDraft() === null)
-    {
-      this.getPost();
-    }
-    else
-    {
-      this.post = this.blogService.getCurrentDraft();
-    }
+    
   }
 
   onChangeTitle(newTitle: string): void
@@ -57,14 +51,22 @@ export class EditComponent implements OnInit {
     this.post.body = newBody;
   }
 
-  getPost(): void
+  getPost(postid: number): void
   {
-    this.blogService
-      .getPost(this.username, this.post.postid)
-      .then(res => {
-        this.post = res;
-        this.post.unsaved = false;
-      });
+    if(this.blogService.getCurrentDraft() === null)
+    {
+      this.blogService
+        .getPost(localStorage.getItem('username'), postid)
+        .then(res => {
+          this.post = res;
+          this.post.unsaved = false;
+        });
+    }
+    else
+    {
+      this.post = this.blogService.getCurrentDraft();
+    }
+
   }
 
   savePost(): void
@@ -75,7 +77,7 @@ export class EditComponent implements OnInit {
       delete this.post.unsaved;
       console.log(this.post);
       this.blogService
-        .newPost(this.username, this.post)
+        .newPost(localStorage.getItem('username'), this.post)
         .then(() => {
           this.post.isNewPost = false;
           this.post.unsaved = false;
@@ -91,7 +93,7 @@ export class EditComponent implements OnInit {
       delete this.post.isNewPost;
       delete this.post.unsaved;
       this.blogService
-        .updatePost(this.username, this.post)
+        .updatePost(localStorage.getItem('username'), this.post)
         .then(() => {
           this.post.isNewPost = false;
           this.post.unsaved = false;
@@ -106,22 +108,23 @@ export class EditComponent implements OnInit {
 
   deletePost(): void
   {
-    this.blogService
-      .deletePost(this.username, this.post.postid)
-      .then(() => {
-        this.blogService.setCurrentDraft(null);
-        this.deletePostEvent.emit(this.post);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.deletePostEvent.emit(this.post);
+    this.blogService.setCurrentDraft(null);
+    if(!this.post.unsaved)
+    {
+      this.blogService
+        .deletePost(localStorage.getItem('username'), this.post.postid)
+        .catch(err => {
+          console.log(err);
+        });
+    }
+    
+    this.blogService.deleteLocalPost(this.post.postid);
     this.router.navigate(['/'])
   }
 
   previewPost(): void
   {
-    this.blogService.setCurrentDraft(null);
-    this.previewEvent.emit();
     this.router.navigate(['preview', this.post.postid])
   }
 }

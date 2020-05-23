@@ -5,7 +5,7 @@
             <input 
                 type="text" 
                 placeholder="Write the title of your post here..." 
-                [ngModel]="this.post.title"
+                [ngModel]="this.post?.title"
                 (ngModelChange)="onChangeTitle($event)"/>
         </div>
     </div>
@@ -14,7 +14,7 @@
         <div>
             <textarea 
                 placeholder="Write the body of your post here..."
-                [ngModel]="this.post.body"
+                [ngModel]="this.post?.body"
                 (ngModelChange)="onChangeBody($event)">
             </textarea>
         </div>
@@ -28,8 +28,8 @@
             Preview
         </button>
         <button 
-            [disabled]="!this.post.unsaved" 
-            [class.disabledBtn]="!this.post.unsaved"
+            [disabled]="!this.post?.unsaved" 
+            [class.disabledBtn]="!this.post?.unsaved"
             (click)="savePost()">
             Save
         </button> 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BlogService } from './blog.service';
 
 @Component({
@@ -6,10 +6,15 @@ import { BlogService } from './blog.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'angular-blog';
   
-  constructor(public blogServoce: BlogService) {
+  constructor(public blogService: BlogService) {
     
+  }
+
+  ngOnInit(): void
+  {
+    window.localStorage.setItem('username', this.blogService.parseJWT(document.cookie)["usr"]);
   }
 }

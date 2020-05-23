@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { EditComponent } from './edit/edit.component';
 import { PreviewComponent } from './preview/preview.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AppComponent } from './app.component';
 
 
 const routes: Routes = [

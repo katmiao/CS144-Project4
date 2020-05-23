@@ -10,7 +10,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
   	styleUrls: ['./preview.component.css']
 })
 export class PreviewComponent implements OnInit {
-	@Input() post: Post;
+	post: Post;
 	markdownTitle: string;
 	markdownBody: string;
 	parser: Parser;
@@ -25,6 +25,10 @@ export class PreviewComponent implements OnInit {
   	constructor(private blogService: BlogService, private route: ActivatedRoute, private router: Router) { }
 
   	ngOnInit(): void {
+		this.blogService.getCurrentDraftObservable()
+			.subscribe(res => {
+				this.post = res;
+			});
   		this.parser = new Parser();
 		this.htmlRenderer = new HtmlRenderer(); 
 		this.preview();
@@ -36,7 +40,6 @@ export class PreviewComponent implements OnInit {
 	}
 
   	preview(): void {
-		  console.log(this.blogService.getCurrentDraft());
   		if (this.post == null) {
   			console.log("---ERROR: previewing null post");
   			return;

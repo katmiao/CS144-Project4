@@ -33,6 +33,10 @@ export class MyDatePipePipe implements PipeTransform {
 			hour = hour % 12;
 		meridium = "PM";
 	}
+	else if(hour == 0)
+	{
+		hour = 12;
+	}
     
     let ret = `${month}/${day}/${year}, ${hour}:${zeroMinutes}${minutes}:${zeroSeconds}${seconds} ${meridium}`;
 	return ret;
