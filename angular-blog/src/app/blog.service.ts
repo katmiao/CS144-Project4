@@ -57,8 +57,7 @@ export class BlogService {
 					resolve(res);
 				})
 				.catch(err => {
-					console.log(err.message);
-					reject();
+					reject(err.message);
 				});
 		});
 	}

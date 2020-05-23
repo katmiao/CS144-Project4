@@ -10,8 +10,6 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 })
 export class EditComponent implements OnInit {;
   post: Post;
-  @Output() deletePostEvent: EventEmitter<Post> = new EventEmitter();
-  @Output() previewEvent: EventEmitter<void> = new EventEmitter();
 
   constructor(
     public blogService: BlogService, 
@@ -60,6 +58,10 @@ export class EditComponent implements OnInit {;
         .then(res => {
           this.post = res;
           this.post.unsaved = false;
+        })
+        .catch(err => {
+          console.log(err);
+          this.router.navigate(['notFound']);
         });
     }
     else
@@ -108,7 +110,6 @@ export class EditComponent implements OnInit {;
 
   deletePost(): void
   {
-    this.deletePostEvent.emit(this.post);
     this.blogService.setCurrentDraft(null);
     if(!this.post.unsaved)
     {

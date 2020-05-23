@@ -41,11 +41,11 @@ export class PreviewComponent implements OnInit {
 
   	preview(): void {
   		if (this.post == null) {
-  			console.log("---ERROR: previewing null post");
+			console.log("---ERROR: previewing null post");
+			this.router.navigate(['notFound']);
   			return;
 		}
-		  
-		console.log(this.post.title);
+
   		this.markdownTitle = this.htmlRenderer.render(this.parser.parse(this.post.title));
   		this.markdownBody = this.htmlRenderer.render(this.parser.parse(this.post.body));
 	}

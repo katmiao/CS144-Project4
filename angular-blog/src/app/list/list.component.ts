@@ -42,8 +42,8 @@ export class ListComponent implements OnInit {
   {
     let currentUtc = new Date().getTime();
     let p = new Post(this.blogService.getNextPostId(), currentUtc, currentUtc, "", "", true, true);
-    
-    this.blogService.addLocalPost(p)
+    //console.log(this.blogService.getNextPostId());
+    this.blogService.addLocalPost(p);
     this.blogService.setCurrentDraft(p);
     this.blogService.incrementNextPostId();
     this.router.navigate(['edit', p.postid]);
