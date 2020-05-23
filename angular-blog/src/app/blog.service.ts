@@ -29,7 +29,7 @@ export class BlogService {
 
 	fetchPosts(username: string): Promise<Post[]>
 	{
-		const url = `api/${username}`;
+		const url = `/api/${username}`;
 		let promise = new Promise<Post[]>((resolve, reject) =>
 		{
 			this.http.get<Post[]>(url)
@@ -48,7 +48,7 @@ export class BlogService {
 
 	getPost(username: string, postid: number): Promise<Post>
 	{
-		const url = `api/${username}/${postid}`;
+		const url = `/api/${username}/${postid}`;
 		return new Promise<Post>((resolve, reject) => {
 			this.http
 				.get<Post>(url)
@@ -64,7 +64,7 @@ export class BlogService {
 
 	newPost(username: string, post: Post): Promise<void>
 	{
-		const url = `api/${username}/${post.postid}`;
+		const url = `/api/${username}/${post.postid}`;
 		return new Promise<void>((resolve, reject) => {
 			this.http
 				.post<void>(url, post, this.httpOptions)
@@ -80,7 +80,7 @@ export class BlogService {
 
 	updatePost(username: string, post: Post): Promise<void> 
 	{
-		const url = `api/${username}/${post.postid}`;
+		const url = `/api/${username}/${post.postid}`;
 		return new Promise<void>((resolve, reject) => {
 			this.http
 				.put<void>(url, post, this.httpOptions)
@@ -96,7 +96,7 @@ export class BlogService {
 
 	deletePost(username: string, postid: number): Promise<void> 
 	{
-		const url = `api/${username}/${postid}`;
+		const url = `/pi/${username}/${postid}`;
 		return new Promise<void>((resolve, reject) => {
 			this.http
 				.delete<void>(url, this.httpOptions)
