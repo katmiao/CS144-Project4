@@ -25,13 +25,14 @@ export class PreviewComponent implements OnInit {
   	constructor(private blogService: BlogService, private route: ActivatedRoute, private router: Router) { }
 
   	ngOnInit(): void {
-		this.blogService.getCurrentDraftObservable()
-			.subscribe(res => {
-				this.post = res;
-			});
-  		this.parser = new Parser();
-		this.htmlRenderer = new HtmlRenderer(); 
-		this.preview();
+		this.route.paramMap.subscribe(() => {
+			let postid = parseInt(this.route.snapshot.paramMap.get('id'));
+			this.getPost(postid);
+
+			this.parser = new Parser();
+			this.htmlRenderer = new HtmlRenderer(); 
+			this.preview();
+		  });
 	}
 	  
 	ngOnChanges(): void
@@ -54,4 +55,29 @@ export class PreviewComponent implements OnInit {
 		this.router.navigate(['edit', this.post.postid]);
 	}
 
+	getPost(postid: number): void
+	{
+	  
+	  if(this.blogService.getCurrentDraft() === null || 
+		 this.blogService.getCurrentDraft().postid != postid)
+	  {
+		this.blogService
+		  .getPost(localStorage.getItem('username'), postid)
+		  .then(res => {
+			this.post = res;
+			this.post.unsaved = false;
+			this.markdownTitle = this.htmlRenderer.render(this.parser.parse(this.post.title));
+			this.markdownBody = this.htmlRenderer.render(this.parser.parse(this.post.body));
+			this.blogService.setCurrentDraft(this.post);
+		  })
+		  .catch(err => {
+			console.log(err);
+			this.router.navigate(['notFound']);
+		  });
+	  }
+	  else
+	  {
+		this.post = this.blogService.getCurrentDraft();
+	  }
+	}
 }

@@ -51,7 +51,9 @@ export class EditComponent implements OnInit {;
 
   getPost(postid: number): void
   {
-    if(this.blogService.getCurrentDraft() === null)
+    
+    if(this.blogService.getCurrentDraft() === null || 
+       this.blogService.getCurrentDraft().postid != postid)
     {
       this.blogService
         .getPost(localStorage.getItem('username'), postid)
@@ -69,7 +71,6 @@ export class EditComponent implements OnInit {;
     {
       this.post = this.blogService.getCurrentDraft();
     }
-
   }
 
   savePost(): void
