@@ -17,12 +17,6 @@ export class PreviewComponent implements OnInit {
 	htmlRenderer: HtmlRenderer;
 	notFound: boolean;
 
-	/** TODO
-	*  Subscribe to the URL activation event
-	*  so that the post to display can be obtained with BlogService 
-	*  and rendered as HTML when a “preview URL” is activated
-	*/
-
   	constructor(private blogService: BlogService, private route: ActivatedRoute, private router: Router) { }
 
   	ngOnInit(): void {
@@ -44,7 +38,6 @@ export class PreviewComponent implements OnInit {
   	preview(): void {
   		if (this.post == null) {
 			console.log("---ERROR: previewing null post");
-			this.notFound = true;
   			return;
 		}
 
