@@ -13,7 +13,6 @@ const routes: Routes = [
     children: [
       { path: 'edit/:id', component: EditComponent },
       { path: 'preview/:id', component: PreviewComponent },
-      { path: 'notFound', component: PageNotFoundComponent },
     ]
   },
   { path: '**', component: PageNotFoundComponent },

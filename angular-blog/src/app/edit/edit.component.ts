@@ -10,6 +10,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 })
 export class EditComponent implements OnInit {;
   post: Post;
+  notFound: boolean;
 
   constructor(
     public blogService: BlogService, 
@@ -22,6 +23,7 @@ export class EditComponent implements OnInit {;
   {
     this.route.paramMap.subscribe(() => {
       let postid = parseInt(this.route.snapshot.paramMap.get('id'));
+      this.notFound = false;
       this.getPost(postid);
     });
   }
@@ -64,7 +66,7 @@ export class EditComponent implements OnInit {;
         })
         .catch(err => {
           console.log(err);
-          this.router.navigate(['notFound']);
+          this.notFound = true;
         });
     }
     else

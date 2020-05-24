@@ -15,6 +15,7 @@ export class PreviewComponent implements OnInit {
 	markdownBody: string;
 	parser: Parser;
 	htmlRenderer: HtmlRenderer;
+	notFound: boolean;
 
 	/** TODO
 	*  Subscribe to the URL activation event
@@ -27,8 +28,8 @@ export class PreviewComponent implements OnInit {
   	ngOnInit(): void {
 		this.route.paramMap.subscribe(() => {
 			let postid = parseInt(this.route.snapshot.paramMap.get('id'));
+			this.notFound = false;
 			this.getPost(postid);
-
 			this.parser = new Parser();
 			this.htmlRenderer = new HtmlRenderer(); 
 			this.preview();
@@ -43,7 +44,7 @@ export class PreviewComponent implements OnInit {
   	preview(): void {
   		if (this.post == null) {
 			console.log("---ERROR: previewing null post");
-			this.router.navigate(['notFound']);
+			this.notFound = true;
   			return;
 		}
 
@@ -72,7 +73,7 @@ export class PreviewComponent implements OnInit {
 		  })
 		  .catch(err => {
 			console.log(err);
-			this.router.navigate(['notFound']);
+			this.notFound = true;
 		  });
 	  }
 	  else

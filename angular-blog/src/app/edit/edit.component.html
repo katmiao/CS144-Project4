@@ -1,41 +1,46 @@
-<div>
-    <div style="text-align: left; margin-bottom: 20px;">
-        <label>Title</label>
-        <div>
-            <input 
-                type="text" 
-                placeholder="Write the title of your post here..." 
-                [ngModel]="this.post?.title"
-                (ngModelChange)="onChangeTitle($event)"/>
-        </div>
-    </div>
-    <div style="text-align: left;">
-        <label>Body</label>
-        <div>
-            <textarea 
-                placeholder="Write the body of your post here..."
-                [ngModel]="this.post?.body"
-                (ngModelChange)="onChangeBody($event)">
-            </textarea>
-        </div>
-    </div>
-    <div>
-        <p>Last Modified: {{ this.post?.modified | myDatePipe }} </p>
-    </div>
-    <div id="buttons">  
-        <button 
-            [disabled]="!this.post?.unsaved" 
-            [class.disabledBtn]="!this.post?.unsaved"
-            (click)="savePost()">
-            Save
-        </button>         
-        <button 
-            (click)="previewPost()">
-            Preview
-        </button>
-        <button 
-            (click)="deletePost()">
-            Delete
-        </button>
-    </div>
+<div *ngIf="this.notFound; else elseBlock">
+    <h2>Page not found</h2>
 </div>
+<ng-template #elseBlock>
+    <div>
+        <div style="text-align: left; margin-bottom: 20px;">
+            <label>Title</label>
+            <div>
+                <input 
+                    type="text" 
+                    placeholder="Write the title of your post here..." 
+                    [ngModel]="this.post?.title"
+                    (ngModelChange)="onChangeTitle($event)"/>
+            </div>
+        </div>
+        <div style="text-align: left;">
+            <label>Body</label>
+            <div>
+                <textarea 
+                    placeholder="Write the body of your post here..."
+                    [ngModel]="this.post?.body"
+                    (ngModelChange)="onChangeBody($event)">
+                </textarea>
+            </div>
+        </div>
+        <div>
+            <p>Last Modified: {{ this.post?.modified | myDatePipe }} </p>
+        </div>
+        <div id="buttons">  
+            <button 
+                [disabled]="!this.post?.unsaved" 
+                [class.disabledBtn]="!this.post?.unsaved"
+                (click)="savePost()">
+                Save
+            </button>         
+            <button 
+                (click)="previewPost()">
+                Preview
+            </button>
+            <button 
+                (click)="deletePost()">
+                Delete
+            </button>
+        </div>
+    </div>
+</ng-template>
