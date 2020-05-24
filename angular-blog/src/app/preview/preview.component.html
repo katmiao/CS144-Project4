@@ -1,6 +1,8 @@
 <div *ngIf="post">
 	<button (click)="toEdit()">Edit</button>
-	<h1 [innerHTML]="markdownTitle"></h1>
-	<p [innerHTML]="markdownBody"></p>
+	<div>
+		<p id="preview" [innerHTML]="markdownTitle"></p>
+		<p id="preview" [innerHTML]="markdownBody"></p>
+	</div>
 </div>
 
