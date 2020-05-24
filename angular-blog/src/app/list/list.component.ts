@@ -24,6 +24,8 @@ export class ListComponent implements OnInit {
           .getLocalPostsObservable()
           .subscribe(res => {
             this.posts = res;
+            for(let i = 0; i < this.posts.length; i++)
+              console.log(this.posts[i].postid);
           });
       });
   }

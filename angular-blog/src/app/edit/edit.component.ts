@@ -59,7 +59,6 @@ export class EditComponent implements OnInit {;
           this.post = res;
           this.post.unsaved = false;
           this.blogService.setCurrentDraft(this.post);
-          console.log("set the draft");
         })
         .catch(err => {
           console.log(err);

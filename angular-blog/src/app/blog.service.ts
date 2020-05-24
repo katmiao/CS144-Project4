@@ -36,6 +36,13 @@ export class BlogService {
 				.toPromise()
 				.then(res => 
 				{
+					res.sort(function(a, b) {
+						if(a.postid < b.postid)
+							return -1;
+						if(a.postid > b.postid)
+							return 1;
+						return 0;
+					});
 					resolve(res);
 				})
 				.catch(err => 
@@ -96,7 +103,7 @@ export class BlogService {
 
 	deletePost(username: string, postid: number): Promise<void> 
 	{
-		const url = `/pi/${username}/${postid}`;
+		const url = `/api/${username}/${postid}`;
 		return new Promise<void>((resolve, reject) => {
 			this.http
 				.delete<void>(url, this.httpOptions)

@@ -22,17 +22,17 @@
     <div>
         Last Modified: {{ this.post?.modified | myDatePipe }} 
     </div>
-    <div id="buttons">          
-        <button 
-            (click)="previewPost()">
-            Preview
-        </button>
+    <div id="buttons">  
         <button 
             [disabled]="!this.post?.unsaved" 
             [class.disabledBtn]="!this.post?.unsaved"
             (click)="savePost()">
             Save
-        </button> 
+        </button>         
+        <button 
+            (click)="previewPost()">
+            Preview
+        </button>
         <button 
             (click)="deletePost()">
             Delete
