@@ -119,7 +119,7 @@ export class BlogService {
 	}
 
 	// local API
-	getLocalPosts(): Observable<Post[]>
+	getLocalPostsObservable(): Observable<Post[]>
 	{
 		return of(this.postList);
 	}

@@ -2,9 +2,9 @@
     <button (click)="onNewPost()">New Post</button>
     <ul class="list">
         <li *ngFor="let p of this.posts"
-            [class.selected]="p === this.blogService.getCurrentDraft()"
+            [class.selected]="p.postid == this.blogService.getCurrentDraft()?.postid"
             (click)="onSelect(p)">
-            <span class="badge">{{ p.modified | myDatePipe }}</span> {{ p.title }}
+            <span class="badge">{{ p.created | myDatePipe }}</span> {{ p.title }}
         </li>
     </ul>
 </div>

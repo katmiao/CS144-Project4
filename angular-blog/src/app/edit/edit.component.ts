@@ -58,6 +58,8 @@ export class EditComponent implements OnInit {;
         .then(res => {
           this.post = res;
           this.post.unsaved = false;
+          this.blogService.setCurrentDraft(this.post);
+          console.log("set the draft");
         })
         .catch(err => {
           console.log(err);
@@ -77,7 +79,6 @@ export class EditComponent implements OnInit {;
     {
       delete this.post.isNewPost;
       delete this.post.unsaved;
-      console.log(this.post);
       this.blogService
         .newPost(localStorage.getItem('username'), this.post)
         .then(() => {

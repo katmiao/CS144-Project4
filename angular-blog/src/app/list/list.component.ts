@@ -17,20 +17,21 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void 
   {
-    this.blogService.updateLocalPosts()
+    this.blogService
+      .updateLocalPosts()
       .then(() => {
         this.blogService
-          .getLocalPosts()
+          .getLocalPostsObservable()
           .subscribe(res => {
             this.posts = res;
           });
       });
-    
-    this.route.queryParams.subscribe(params => {
-      // todo - https://angular.io/guide/router - for all components 
-    });
   }
 
+  ngOnChanges(): void
+  {
+    console.log(this.blogService.getCurrentDraft());
+  }
 
   onSelect(post: Post)
   {
